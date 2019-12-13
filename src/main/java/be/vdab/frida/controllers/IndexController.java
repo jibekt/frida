@@ -1,5 +1,7 @@
 package be.vdab.frida.controllers;
 
+import be.vdab.frida.domain.Adres;
+import be.vdab.frida.domain.Gemeente;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,7 +14,25 @@ import java.time.LocalDate;
 @Controller
 @RequestMapping
 public class IndexController {
+
+    public String boodschap(){
+        DayOfWeek day = LocalDate.now().getDayOfWeek();
+        if(day == DayOfWeek.MONDAY || day == DayOfWeek.THURSDAY){
+            return "gesloten";
+        }
+        return "open";
+
+    }
+
     @GetMapping
+    public ModelAndView index(){
+        ModelAndView modelAndView = new ModelAndView("index", "boodschap", boodschap());
+        modelAndView.addObject(new Adres("Bergstraat", "254", new Gemeente("Heist-op-den-Berg", 2222)));
+        return modelAndView;
+    }
+
+
+    /*
     public ModelAndView index(){
         DayOfWeek day = LocalDate.now().getDayOfWeek();
         String openGesloten=

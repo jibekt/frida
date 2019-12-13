@@ -9,6 +9,9 @@
 <body>
     <h1>Frituur Frida</h1>
     <h2>Vandaag zijn wij <span th:text="${boodschap}"></span></h2>
-
+    <h2> Ons adres: </h2>
+    <div th:object="${adres}"
+         th:text="|*{straat} *{huisNr} *{gemeente.naam} *{gemeente.postCode}|">
+    </div>
 </body>
 </html>
