@@ -10,7 +10,7 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("sauzen")
 public class SausController {
     private final Saus[] sauzen = {
-            new Saus(1, "cocktail", new String[]{"ketchup, mayonaise, room"}),
+            new Saus(1, "cocktail", new String[]{"ketchup, mayonaise, room, azijn"}),
             new Saus(2, "mayonaise", new String[]{"ei, olie"}),
             new Saus(3, "mosterd", new String[]{"mosterdzaden, azijn, water"}),
             new Saus(4, "tartare", new String[]{"ei, sjalot, mayonaise"}),
