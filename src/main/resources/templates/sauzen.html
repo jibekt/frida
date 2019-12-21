@@ -9,8 +9,11 @@
         <span th:text="*{naam}"></span>
         <ul>
             <li th:each="ingredient:*{ingredienten}"
-                th:text="${ingredient}"></li>
+                th:text="${ingredient}">
+            </li>
+
         </ul>
+        <a th:href="@{/sauzen/{nummer}(nummer=*{nummer})}">detail</a>
     </li>
 </ul>
 </body>
