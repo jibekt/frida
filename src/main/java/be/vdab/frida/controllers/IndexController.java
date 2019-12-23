@@ -13,6 +13,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Controller
 @RequestMapping
@@ -24,7 +25,6 @@ public class IndexController {
             return "gesloten";
         }
         return "open";
-
     }
 
     @GetMapping

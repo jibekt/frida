@@ -2,12 +2,15 @@ package be.vdab.frida.controllers;
 
 import be.vdab.frida.domain.Saus;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("sauzen")
@@ -31,6 +34,21 @@ public class SausController {
         Arrays.stream(sauzen).filter(saus-> saus.getNummer() == nummer).findFirst()
                 .ifPresent(saus -> modelAndView.addObject("saus", saus));
         return modelAndView;
+    }
+
+    private final char[]alfabet="abcdefghijklmnopqrstuvwxyz".toCharArray();
+    @GetMapping("alfabet")
+    public ModelAndView alfabet(){
+        return new ModelAndView("sausAlfabet", "alfabet", alfabet);
+    }
+    private List<Saus> sauzenDieBeginnenMet(char letter){
+        return Arrays.stream(sauzen).filter(saus -> saus.getNaam().charAt(0)==letter)
+                .collect(Collectors.toList());
+    }
+    @GetMapping("alfabet/{letter}")
+    public ModelAndView sauzenBeginnendMet(@PathVariable char letter){
+        return new ModelAndView("sausalfabet","alfabet", alfabet)
+                .addObject("sauzen", sauzenDieBeginnenMet(letter));
     }
 
 }
