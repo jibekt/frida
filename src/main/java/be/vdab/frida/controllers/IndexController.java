@@ -3,11 +3,14 @@ package be.vdab.frida.controllers;
 import be.vdab.frida.domain.Adres;
 import be.vdab.frida.domain.Gemeente;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 
@@ -25,9 +28,19 @@ public class IndexController {
     }
 
     @GetMapping
-    public ModelAndView index(){
+    public ModelAndView index
+            (@CookieValue(name = "reedsBezocht", required = false)
+                     String reedsBezocht, HttpServletResponse response){
         ModelAndView modelAndView = new ModelAndView("index", "boodschap", boodschap());
-        modelAndView.addObject(new Adres("Bergstraat", "254", new Gemeente("Heist-op-den-Berg", 2222)));
+        modelAndView.addObject
+                (new Adres("Bergstraat", "254", new Gemeente("Heist-op-den-Berg", 2222)));
+        Cookie cookie = new Cookie("reedsBezocht", "ja");
+        cookie.setMaxAge(31_536_000);
+        cookie.setPath("/");
+        response.addCookie(cookie);
+        if (reedsBezocht != null){
+            modelAndView.addObject("reedsBezocht", true);
+        }
         return modelAndView;
     }
 
