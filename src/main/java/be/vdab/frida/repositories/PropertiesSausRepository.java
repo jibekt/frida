@@ -11,18 +11,17 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Qualifier("CSV")
 @Component
-public class CSVSausRepository implements SausRepository {
-    private static final Path PAD = Paths.get("/data/sauzen.csv");
+@Qualifier("properties")
+public class PropertiesSausRepository implements SausRepository {
+    private static final Path PAD = Paths.get("/data/sauzen.properties");
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @Override
     public List<Saus> findAll() {
-        List<Saus> sauzen = new ArrayList<>();
         try {
             return Files.lines(PAD)
                     .filter(regel -> ! regel.isEmpty())
@@ -35,18 +34,20 @@ public class CSVSausRepository implements SausRepository {
         }
     }
     private Saus maakSaus(String regel) {
-        String[] onderdelen = regel.split(",");
+        String[] onderdelen = regel.split(":");
         if (onderdelen.length < 2) {
             String fout = PAD + ":" + regel + " bevat minder dan 2 onderdelen";
             logger.error(fout);
             throw new SausRepositoryException(fout);
         }
         try {
-            String[] ingredienten = new String[onderdelen.length - 2];
-            for (int index = 2; index < onderdelen.length; index++) {
-                ingredienten[index - 2] = onderdelen[index];
+            String[] naamEnIngredienten = onderdelen[1].split(",");
+            String[] ingredienten = new String[onderdelen.length - 1];
+            for (int index = 1; index < onderdelen.length; index++) {
+                ingredienten[index - 1] = onderdelen[index];
             }
-            return new Saus(Long.parseLong(onderdelen[0]),onderdelen[1],ingredienten);
+            return new Saus(Long.parseLong(onderdelen[0]), naamEnIngredienten[0],
+                    ingredienten);
         } catch (NumberFormatException ex) {
             String fout = PAD + ":" + regel + " bevat verkeerde id";
             logger.error(fout, ex);
